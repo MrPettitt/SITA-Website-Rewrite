@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SITA | State Information Technology Agency</title>
+<meta name="description" content="SITA is the ICT backbone of the South African public sector, delivering secure, efficient and innovative technology to government institutions nationwide."/>
+<meta name="theme-color" content="#070B14"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #070B14;
+    --surface: #0E1424;
+    --surface-2: #151D33;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(124,156,255,0.35);
+    --text: #E9EDF7;
+    --body: #BAC4DA;
+    --muted: #8E9BB8;
+    --primary: #3D6BFF;
+    --primary-soft: #8FA9FF;
+    --violet: #7A4DFF;
+    --mint: #2DE2C0;
+    --grad: linear-gradient(135deg, #3D6BFF 0%, #7A4DFF 100%);
+    --radius: 18px;
+    --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; border-radius: 6px; }
+
+  .skip-link {
+    position: absolute; left: 16px; top: -60px; z-index: 200;
+    background: var(--mint); color: #04201A; font-weight: 700;
+    padding: 10px 18px; border-radius: 10px; text-decoration: none;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 12px; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(7,11,20,0.7);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(7,11,20,0.94); }
+
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-badge {
+    width: 44px; height: 44px;
+    background: var(--grad);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; color: #fff; letter-spacing: 0.5px;
+    box-shadow: 0 6px 20px rgba(61,107,255,0.4);
+  }
+  .logo-text { line-height: 1.2; }
+  .logo-text strong { display: block; font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: 0.3px; }
+  .logo-text span { font-size: 9.5px; font-weight: 500; color: var(--muted); letter-spacing: 1.2px; text-transform: uppercase; }
+
+  .nav-links { display: flex; gap: 30px; list-style: none; align-items: center; }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--body);
+    text-decoration: none; position: relative; transition: color 0.2s;
+  }
+  .nav-links a:not(.nav-cta)::after {
+    content: ''; position: absolute; bottom: -6px; left: 0; right: 0; height: 2px; border-radius: 2px;
+    background: var(--grad); transform: scaleX(0); transition: transform 0.25s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+  .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+  .nav-cta {
+    background: var(--grad); color: #fff !important; font-weight: 600 !important;
+    padding: 10px 22px; border-radius: 999px;
+    box-shadow: 0 6px 20px rgba(61,107,255,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(61,107,255,0.5); }
+
+  .menu-toggle {
+    display: none; width: 44px; height: 44px; border-radius: 12px;
+    background: var(--surface-2); border: 1px solid var(--line); cursor: pointer;
+    align-items: center; justify-content: center; flex-direction: column; gap: 5px;
+  }
+  .menu-toggle span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: transform 0.25s, opacity 0.25s; }
+  .menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: min(100vh, 860px);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 130px 5% 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(143,169,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143,169,255,0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 75%);
+  }
+  .hero-glow { position: absolute; top: -220px; right: -120px; width: 760px; height: 760px; pointer-events: none;
+    background: radial-gradient(circle, rgba(122,77,255,0.28) 0%, transparent 68%); }
+  .hero-glow2 { position: absolute; bottom: -240px; left: -160px; width: 680px; height: 680px; pointer-events: none;
+    background: radial-gradient(circle, rgba(45,226,192,0.14) 0%, transparent 70%); }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.4px; color: var(--primary-soft);
+    background: rgba(61,107,255,0.12); border: 1px solid rgba(143,169,255,0.25);
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 26px; position: relative;
+  }
+  .eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 12px var(--mint); }
+
+  .hero-title {
+    font-size: clamp(40px, 6vw, 78px);
+    font-weight: 800; line-height: 1.06; letter-spacing: -2px;
+    max-width: 860px; margin-bottom: 26px; position: relative;
+  }
+  .hero-title .accent {
+    background: linear-gradient(120deg, #8FA9FF 0%, #B79BFF 45%, #2DE2C0 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-title .light { font-weight: 300; color: var(--body); }
+
+  .hero-sub { font-size: clamp(16px, 1.8vw, 19px); color: var(--body); max-width: 620px; margin-bottom: 42px; position: relative; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; position: relative; }
+
+  .hero-eyebrow, .hero-title, .hero-sub, .hero-actions, .hero-stats { opacity: 0; animation: fadeUp 0.8s forwards; }
+  .eyebrow { opacity: 0; animation: fadeUp 0.7s 0.1s forwards; }
+  .hero-title { animation-delay: 0.2s; }
+  .hero-sub { animation-delay: 0.35s; }
+  .hero-actions { animation-delay: 0.5s; }
+  .hero-stats { animation-delay: 0.65s; }
+
+  .btn-primary, .btn-outline {
+    font-family: var(--font); font-size: 14.5px; font-weight: 600;
+    padding: 14px 30px; border-radius: 999px; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .btn-primary { background: var(--grad); color: #fff; border: none; box-shadow: 0 10px 30px rgba(61,107,255,0.4); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(61,107,255,0.55); }
+  .btn-outline { background: rgba(255,255,255,0.03); color: var(--text); border: 1px solid rgba(255,255,255,0.18); }
+  .btn-outline:hover { border-color: var(--primary-soft); background: rgba(143,169,255,0.1); }
+
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 56px;
+    margin-top: 72px; position: relative;
+  }
+  .stat-num { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+  .stat-num sup { font-size: 15px; font-weight: 700; color: var(--mint); margin-left: 3px; vertical-align: super; }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  /* ===== TICKER ===== */
+  .ticker { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 0; overflow: hidden; white-space: nowrap; }
+  .ticker-track { display: inline-flex; gap: 56px; animation: ticker 40s linear infinite; }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  .ticker-item { display: inline-flex; align-items: center; gap: 12px; font-size: 13.5px; font-weight: 500; color: var(--muted); }
+  .ticker-item::before { content: ''; width: 6px; height: 6px; border-radius: 2px; background: var(--grad); transform: rotate(45deg); }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 104px 5%; }
+
+  .section-label {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    color: var(--mint); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(30px, 3.8vw, 48px); font-weight: 800; line-height: 1.15;
+    letter-spacing: -1px; max-width: 640px; margin-bottom: 18px;
+  }
+  .section-sub { font-size: 16px; color: var(--muted); max-width: 560px; margin-bottom: 56px; }
+
+  .alt-bg { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+  /* ===== SERVICES ===== */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+  .service-card {
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 32px; position: relative; overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .service-card::before {
+    content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s;
+    background: radial-gradient(circle at 0% 0%, rgba(61,107,255,0.18), transparent 60%);
+  }
+  .service-card:hover { border-color: var(--line-strong); transform: translateY(-5px); box-shadow: 0 22px 48px rgba(0,0,0,0.45); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon {
+    width: 54px; height: 54px; border-radius: 16px; margin-bottom: 22px; position: relative;
+    background: rgba(61,107,255,0.14); border: 1px solid rgba(143,169,255,0.25);
+    display: flex; align-items: center; justify-content: center; color: var(--primary-soft);
+  }
+  .service-icon svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .service-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; position: relative; }
+  .service-card p { font-size: 14.5px; color: var(--muted); position: relative; }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; position: relative;
+    font-size: 14px; font-weight: 600; color: var(--primary-soft); text-decoration: none; transition: gap 0.2s, color 0.2s;
+  }
+  .service-link:hover { gap: 11px; color: #fff; }
+
+  /* ===== ABOUT ===== */
+  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-card-main {
+    background: linear-gradient(160deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--line-strong); border-radius: 24px; padding: 44px; position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  }
+  .about-card-main h3 { font-size: 24px; font-weight: 800; margin-bottom: 16px; }
+  .about-card-main p { font-size: 15px; color: var(--muted); }
+  .vision-badge {
+    position: absolute; top: -16px; right: 24px; background: var(--grad); color: #fff;
+    border-radius: 999px; padding: 8px 18px; font-size: 11.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 22px rgba(61,107,255,0.45);
+  }
+  .values-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+  .value-pill {
+    background: rgba(45,226,192,0.08); border: 1px solid rgba(45,226,192,0.25);
+    border-radius: 999px; padding: 7px 16px; font-size: 12.5px; font-weight: 500; color: var(--mint);
+  }
+  .mission-item { display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .mission-item:last-child { border-bottom: none; }
+  .mission-num {
+    font-size: 30px; font-weight: 800; line-height: 1; min-width: 46px;
+    background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .mission-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .mission-item p { font-size: 14.5px; color: var(--muted); }
+
+  /* ===== NEWS ===== */
+  .news-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px; }
+  .news-header .section-title { margin-bottom: 0; }
+  .news-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; }
+  .news-card {
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s; display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+  }
+  .news-card:hover { border-color: var(--line-strong); transform: translateY(-4px); }
+  .news-img { height: 200px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .news-img.f { height: 290px; }
+  .news-img.g1 { background: linear-gradient(135deg, #1B2F7A, #4A2CB8); }
+  .news-img.g2 { background: linear-gradient(135deg, #0F4C5C, #1E3A8A); }
+  .news-img.g3 { background: linear-gradient(135deg, #3B1D82, #0E6B68); }
+  .news-img-pattern {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .news-img svg { width: 56px; height: 56px; position: relative; fill: none; stroke: rgba(255,255,255,0.85); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .news-body { padding: 26px; flex: 1; }
+  .news-cat {
+    display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 999px; background: rgba(61,107,255,0.15); color: var(--primary-soft); margin-bottom: 14px;
+  }
+  .news-body h3 { font-size: 16px; font-weight: 700; line-height: 1.5; margin-bottom: 10px; }
+  .news-body.featured h3 { font-size: 21px; }
+  .news-body p { font-size: 14px; color: var(--muted); }
+  .news-date { font-size: 12.5px; color: var(--muted); margin-top: 16px; }
+
+  /* ===== TENDERS ===== */
+  .tender-list { display: flex; flex-direction: column; gap: 14px; max-width: 980px; }
+  .tender-row {
+    display: grid; grid-template-columns: 130px 1fr auto auto; gap: 24px; align-items: center;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 20px 26px;
+    transition: border-color 0.25s;
+  }
+  .tender-row:hover { border-color: var(--line-strong); }
+  .tender-ref { font-size: 12.5px; font-weight: 700; color: var(--primary-soft); letter-spacing: 0.5px; }
+  .tender-row h3 { font-size: 15.5px; font-weight: 600; }
+  .tender-row p { font-size: 13px; color: var(--muted); }
+  .tender-close { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .tag { font-size: 11.5px; font-weight: 700; padding: 5px 14px; border-radius: 999px; white-space: nowrap; }
+  .tag.open { background: rgba(45,226,192,0.12); color: var(--mint); border: 1px solid rgba(45,226,192,0.3); }
+  .tag.soon { background: rgba(255,196,77,0.12); color: #FFC44D; border: 1px solid rgba(255,196,77,0.3); }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 22px; }
+
+  /* ===== CAREERS ===== */
+  .jobs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .job-card { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; transition: border-color 0.25s, transform 0.25s; }
+  .job-card:hover { border-color: var(--line-strong); transform: translateY(-4px); }
+  .job-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .job-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .job-meta span { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 999px; }
+  .job-card p { font-size: 14px; color: var(--muted); }
+
+  /* ===== CONTACT / CTA ===== */
+  .contact-wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+  .contact-info a { color: var(--body); text-decoration: none; font-size: 15px; display: flex; align-items: center; gap: 12px; transition: color 0.2s; }
+  .contact-info a:hover { color: #fff; }
+  .contact-info svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--mint); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  form.contact-form {
+    background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 24px; padding: 36px;
+    display: grid; gap: 18px; box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  }
+  .field { display: grid; gap: 7px; }
+  .field label { font-size: 13px; font-weight: 600; color: var(--body); }
+  .field input, .field select, .field textarea {
+    font-family: var(--font); font-size: 15px; color: var(--text);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 13px 16px; width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field textarea { resize: vertical; min-height: 120px; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--primary-soft); box-shadow: 0 0 0 3px rgba(61,107,255,0.25); }
+  .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: #FF6B7A; }
+  .error-msg { font-size: 12.5px; color: #FF8C98; min-height: 0; display: none; }
+  .field.invalid .error-msg { display: block; }
+  .form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .form-status { font-size: 14px; padding: 14px 18px; border-radius: 12px; display: none; }
+  .form-status.ok { display: block; background: rgba(45,226,192,0.1); border: 1px solid rgba(45,226,192,0.3); color: var(--mint); }
+
+  .cta-strip {
+    padding: 90px 5%; text-align: center; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #14226B 0%, #3A1F8F 100%);
+  }
+  .cta-strip::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(45,226,192,0.2), transparent 60%); }
+  .cta-strip h2 { font-size: clamp(30px, 3.8vw, 46px); font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; position: relative; }
+  .cta-strip p { font-size: 16px; color: #D2D9F5; max-width: 500px; margin: 0 auto 34px; position: relative; }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .cta-strip .btn-primary { background: #fff; color: #1B2470; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+  /* ===== FOOTER ===== */
+  footer { background: #04070E; border-top: 1px solid var(--line); padding: 76px 5% 40px; }
+  .footer-top { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; padding-bottom: 56px; border-bottom: 1px solid var(--line); }
+  .footer-brand p { font-size: 14px; color: var(--muted); margin: 20px 0 24px; max-width: 300px; }
+  .footer-socials { display: flex; gap: 10px; }
+  .social-btn {
+    width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; text-decoration: none;
+    color: var(--muted); transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+  .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+  .social-btn:hover { border-color: var(--primary-soft); background: rgba(61,107,255,0.14); color: #fff; }
+  .footer-col h4 { font-size: 12.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text); margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .footer-bottom p { font-size: 13px; color: var(--muted); }
+  .footer-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: #fff; }
+  .sa-flag { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .flag-stripe { display: flex; gap: 2px; overflow: hidden; border-radius: 3px; width: 28px; height: 18px; }
+  .flag-stripe span { display: block; flex: 1; }
+
+  .to-top {
+    position: fixed; right: 24px; bottom: 24px; z-index: 90; width: 46px; height: 46px; border-radius: 14px;
+    background: var(--grad); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 28px rgba(61,107,255,0.5); opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+  .to-top svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 960px) {
+    .menu-toggle { display: flex; }
+    .nav-links {
+      position: fixed; top: 72px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0;
+      background: rgba(7,11,20,0.98); border-bottom: 1px solid var(--line); padding: 12px 5% 24px;
+      transform: translateY(-120%); opacity: 0; visibility: hidden;
+      transition: transform 0.3s, opacity 0.3s, visibility 0.3s;
+    }
+    .nav-links.open { transform: none; opacity: 1; visibility: visible; }
+    .nav-links li a { display: block; padding: 14px 4px; font-size: 16px; border-bottom: 1px solid var(--line); }
+    .nav-links a::after { display: none; }
+    .nav-links li:last-child a { border: none; margin-top: 14px; text-align: center; padding: 14px; }
+    .about-layout, .contact-wrap { grid-template-columns: 1fr; gap: 56px; }
+    .news-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .hero-stats { grid-template-columns: repeat(2, auto); gap: 36px 56px; }
+    .tender-row { grid-template-columns: 1fr auto; }
+    .tender-row .tender-close { grid-column: 1; }
+  }
+  @media (max-width: 420px) {
+    nav .logo-text span { letter-spacing: 0.6px; font-size: 8.5px; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 80px 5%; }
+    .footer-top { grid-template-columns: 1fr; }
+    .form-two { grid-template-columns: 1fr; }
+    form.contact-form, .about-card-main { padding: 26px; }
+    .hero-actions .btn-primary, .hero-actions .btn-outline { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- NAV -->
+<nav id="nav" aria-label="Main">
+  <a href="#top" class="logo" aria-label="SITA home">
+    <div class="logo-badge">SITA</div>
+    <div class="logo-text">
+      <strong>SITA</strong>
+      <span>State Information Technology Agency</span>
+    </div>
+  </a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#tenders">Tenders</a></li>
+    <li><a href="#careers">Careers</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="eyebrow">South Africa's Digital Government Engine</div>
+
+  <h1 class="hero-title">
+    Empowering<br/>
+    <span class="accent">Digital Government</span><br/>
+    <span class="light">for Every Citizen.</span>
+  </h1>
+
+  <p class="hero-sub">
+    SITA is the ICT powerhouse of the South African public sector, driving secure, efficient and innovative technology solutions across 300+ government institutions nationwide.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#services" class="btn-primary">Explore Services <span aria-hidden="true">→</span></a>
+    <a href="#about" class="btn-outline">Our Mission</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="300">300</span><sup>+</sup></div>
+      <div class="stat-label">Government Clients</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="25">25</span><sup>yrs</sup></div>
+      <div class="stat-label">Of Public Service</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="3">3</span>K<sup>+</sup></div>
+      <div class="stat-label">ICT Professionals</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="9">9</span></div>
+      <div class="stat-label">Provincial Offices</div>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">e-Government Solutions</span>
+    <span class="ticker-item">Cloud Infrastructure</span>
+    <span class="ticker-item">Cybersecurity Services</span>
+    <span class="ticker-item">Enterprise Architecture</span>
+    <span class="ticker-item">ICT Procurement</span>
+    <span class="ticker-item">Digital Transformation</span>
+    <span class="ticker-item">Broadband Connectivity</span>
+    <span class="ticker-item">Data Centres</span>
+    <span class="ticker-item">Managed Services</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="alt-bg" id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title reveal">End-to-End ICT Services for Government</h2>
+  <p class="section-sub reveal">From procurement to deployment, we deliver integrated technology solutions that keep South Africa's public sector running securely and efficiently.</p>
+
+  <div class="services-grid">
+    <article class="service-card reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h3>Cybersecurity &amp; Cyber Labs</h3>
+      <p>State-of-the-art security operations and training programmes protecting critical government infrastructure and empowering the next generation of cyber professionals.</p>
+      <a href="#contact" class="service-link" data-topic="Cybersecurity &amp; Cyber Labs">Learn more <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="service-card reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 010-8 5.5 5.5 0 0110.7-1.2A4.6 4.6 0 0117 18H7z"/></svg></div>
+      <h3>Cloud &amp; Data Centre Services</h3>
+      <p>Secure, scalable cloud infrastructure and co-location services from modern data centres, enabling agile digital government across all spheres.</p>
+      <a href="#contact" class="service-link" data-topic="Cloud &amp; Data Centre Services">Learn more <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="service-card reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></div>
+      <h3>Connectivity &amp; Networks</h3>
+      <p>Wide-area networks, broadband connectivity and managed network solutions linking government departments to deliver seamless public services nationwide.</p>
+      <a href="#contact" class="service-link" data-topic="Connectivity &amp; Networks">Learn more <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="service-card reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a1 1 0 001 .8h8.9a1 1 0 001-.8L20 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg></div>
+      <h3>ICT Procurement</h3>
+      <p>Centralised, compliant procurement of ICT goods and services at competitive rates, ensuring government gets maximum value from every technology investment.</p>
+      <a href="#tenders" class="service-link">View tenders <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="service-card reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg></div>
+      <h3>e-Government Platforms</h3>
+      <p>Digital platforms that transform citizen-facing services, enabling seamless interaction between government and the public through accessible technology.</p>
+      <a href="#contact" class="service-link" data-topic="e-Government Platforms">Learn more <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="service-card reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></div>
+      <h3>Enterprise Application Services</h3>
+      <p>End-to-end management of enterprise applications including ERP systems, GIS solutions and bespoke software supporting critical government operations.</p>
+      <a href="#contact" class="service-link" data-topic="Enterprise Application Services">Learn more <span aria-hidden="true">→</span></a>
+    </article>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-layout">
+    <div class="reveal">
+      <div class="about-card-main">
+        <div class="vision-badge">Est. 1999</div>
+        <h3>Our Vision &amp; Mission</h3>
+        <p>
+          To be the leading information and communications technology (ICT) agency in public service delivery, rendering efficient, value-added ICT services to the public sector in a secure, cost-effective and integrated manner that contributes to citizen convenience.
+        </p>
+        <div class="values-row">
+          <span class="value-pill">Service Excellence</span>
+          <span class="value-pill">Innovation</span>
+          <span class="value-pill">Transparency</span>
+          <span class="value-pill">Integrity</span>
+          <span class="value-pill">Fairness</span>
+          <span class="value-pill">Prudence</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="section-label">About SITA</div>
+      <h2 class="section-title">The Government's IT Business Partner</h2>
+      <p class="section-sub" style="margin-bottom: 20px;">Established by the SITA Act of 1998, we consolidate and coordinate the State's technology resources, driving savings, capability and interoperability across South Africa.</p>
+
+      <div>
+        <div class="mission-item">
+          <div class="mission-num">01</div>
+          <div>
+            <h4>Mandatory Services</h4>
+            <p>Transversal ICT systems, network infrastructure and security operations mandated for all national and provincial departments.</p>
+          </div>
+        </div>
+        <div class="mission-item">
+          <div class="mission-num">02</div>
+          <div>
+            <h4>Non-Mandatory Services</h4>
+            <p>Extended ICT consulting, procurement facilitation and managed services available to any public sector entity.</p>
+          </div>
+        </div>
+        <div class="mission-item">
+          <div class="mission-num">03</div>
+          <div>
+            <h4>Digital Transformation</h4>
+            <p>Driving e-Government through innovative platforms that improve citizen experience and public service efficiency.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="alt-bg" id="news">
+  <div class="news-header">
+    <div>
+      <div class="section-label">Latest Updates</div>
+      <h2 class="section-title reveal">News &amp; Announcements</h2>
+    </div>
+    <a href="#news" class="btn-outline" id="viewAllNews" aria-expanded="false">View All News <span aria-hidden="true">→</span></a>
+  </div>
+
+  <div class="news-grid" id="newsGrid">
+    <a href="#contact" class="news-card reveal" data-topic="Cyberlabs programme">
+      <div class="news-img f g1">
+        <div class="news-img-pattern"></div>
+        <svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5L2 9z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 9v6"/></svg>
+      </div>
+      <div class="news-body featured">
+        <span class="news-cat">CSR · Digital Inclusion</span>
+        <h3>SITA Cyberlabs Handover at Manzana Secondary School: Empowering the Next Generation</h3>
+        <p>A state-of-the-art digital laboratory handed over as part of SITA's commitment to youth empowerment and digital skills development in rural communities.</p>
+        <div class="news-date">March 2025</div>
+      </div>
+    </a>
+
+    <a href="#careers" class="news-card reveal">
+      <div class="news-img g2">
+        <div class="news-img-pattern"></div>
+        <svg viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 7V4M9 12h.01M15 12h.01M9 15h6"/></svg>
+      </div>
+      <div class="news-body">
+        <span class="news-cat">Training · AI</span>
+        <h3>Microsoft SMME AI &amp; Data Engineer Programme Opens Applications</h3>
+        <div class="news-date">February 2025</div>
+      </div>
+    </a>
+
+    <a href="#services" class="news-card reveal">
+      <div class="news-img g3">
+        <div class="news-img-pattern"></div>
+        <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 118 0v3"/></svg>
+      </div>
+      <div class="news-body">
+        <span class="news-cat">Security · Infrastructure</span>
+        <h3>SITA Strengthens National Cybersecurity Posture Ahead of Q2</h3>
+        <div class="news-date">January 2025</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- TENDERS -->
+<section id="tenders">
+  <div class="section-label">Procurement</div>
+  <h2 class="section-title reveal">Current Tenders &amp; Bids</h2>
+  <p class="section-sub reveal">Transparent, compliant procurement for government ICT. Browse the latest opportunities for suppliers.</p>
+
+  <div class="tender-list">
+    <div class="tender-row reveal">
+      <span class="tender-ref">SITA-2025-014</span>
+      <div><h3>Provision of Managed Network Services</h3><p>Connectivity &amp; Networks</p></div>
+      <span class="tender-close">Closes 30 Apr 2025</span>
+      <span class="tag open">Open</span>
+    </div>
+    <div class="tender-row reveal">
+      <span class="tender-ref">SITA-2025-021</span>
+      <div><h3>Supply of Enterprise Cloud Hosting Capacity</h3><p>Cloud &amp; Data Centre</p></div>
+      <span class="tender-close">Closes 15 May 2025</span>
+      <span class="tag open">Open</span>
+    </div>
+    <div class="tender-row reveal">
+      <span class="tender-ref">SITA-2025-027</span>
+      <div><h3>Security Operations Centre Tooling Renewal</h3><p>Cybersecurity</p></div>
+      <span class="tender-close">Opens 02 Jun 2025</span>
+      <span class="tag soon">Upcoming</span>
+    </div>
+  </div>
+  <p class="note">Sample listings shown for this redesign. Real tenders are published on the official SITA portal.</p>
+</section>
+
+<!-- CAREERS -->
+<section class="alt-bg" id="careers">
+  <div class="section-label">Join Us</div>
+  <h2 class="section-title reveal">Build the Future of Public Service</h2>
+  <p class="section-sub reveal">Join 3,000+ ICT professionals shaping how South Africans interact with government.</p>
+
+  <div class="jobs-grid">
+    <article class="job-card reveal">
+      <h3>Cloud Solutions Architect</h3>
+      <div class="job-meta"><span>Pretoria</span><span>Full time</span><span>Cloud</span></div>
+      <p>Design secure, scalable hosting platforms for national and provincial departments.</p>
+    </article>
+    <article class="job-card reveal">
+      <h3>Cybersecurity Analyst</h3>
+      <div class="job-meta"><span>Centurion</span><span>Full time</span><span>Security</span></div>
+      <p>Monitor, detect and respond to threats across critical government infrastructure.</p>
+    </article>
+    <article class="job-card reveal">
+      <h3>Graduate ICT Trainee</h3>
+      <div class="job-meta"><span>Nationwide</span><span>12 months</span><span>Youth</span></div>
+      <p>A structured programme giving graduates hands-on experience in public sector technology.</p>
+    </article>
+  </div>
+  <p class="note">Sample roles shown for this redesign.</p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="reveal">
+      <div class="section-label">Get in Touch</div>
+      <h2 class="section-title">Ready to Partner with SITA?</h2>
+      <p class="section-sub" style="margin-bottom: 28px;">Connect with our team to explore how SITA's ICT solutions can transform your department's service delivery.</p>
+      <div class="contact-info">
+        <a href="tel:+27124823000"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>012 482 3000</a>
+        <a href="mailto:contact.centre@sita.co.za"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>contact.centre@sita.co.za</a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=459+Tsitsa+Street+Erasmuskloof+Pretoria" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>459 Tsitsa Street, Erasmuskloof, Pretoria</a>
+      </div>
+    </div>
+
+    <form class="contact-form reveal" id="contactForm" novalidate>
+      <div class="form-two">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required/>
+          <span class="error-msg">Please enter your name.</span>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required/>
+          <span class="error-msg">Please enter a valid email address.</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="topic">Topic</label>
+        <select id="topic" name="topic">
+          <option>General enquiry</option>
+          <option>Cybersecurity &amp; Cyber Labs</option>
+          <option>Cloud &amp; Data Centre Services</option>
+          <option>Connectivity &amp; Networks</option>
+          <option>e-Government Platforms</option>
+          <option>Enterprise Application Services</option>
+          <option>Cyberlabs programme</option>
+          <option>Tenders</option>
+          <option>Careers</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+        <span class="error-msg">Please tell us how we can help (at least 10 characters).</span>
+      </div>
+      <button type="submit" class="btn-primary">Send message <span aria-hidden="true">→</span></button>
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <h2>Supplying government? Start here.</h2>
+  <p>Review current opportunities and the requirements for doing business with SITA.</p>
+  <div class="cta-actions">
+    <a href="#tenders" class="btn-primary">View Tenders <span aria-hidden="true">→</span></a>
+    <a href="#careers" class="btn-outline">See Careers</a>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#top" class="logo" aria-label="SITA home">
+        <div class="logo-badge">SITA</div>
+        <div class="logo-text">
+          <strong>SITA</strong>
+          <span>State Information Technology Agency</span>
+        </div>
+      </a>
+      <p>South Africa's premier government ICT agency, delivering secure, cost-effective technology solutions that power public service delivery and citizen convenience since 1999.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="https://x.com/" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.2 2H21l-6.5 7.4L22 22h-6l-4.7-6.1L5.8 22H3l7-8L2 2h6.1l4.2 5.6L18.2 2zm-1 18h1.6L7 3.9H5.3L17.2 20z"/></svg></a>
+        <a class="social-btn" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11-.01 5 2.5 2.5 0 01.01-5zM3 9.5h4V21H3V9.5zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4V9.5z"/></svg></a>
+        <a class="social-btn" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 8V6.5c0-.7.3-1 1.1-1H17V2h-2.8C11.2 2 10 3.800 10 6.200V8H7.500v3.500H10V22h4V11.500h2.700L17 8h-3z"/></svg></a>
+        <a class="social-btn" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21.6 7.2a2.5 2.5 0 00-1.8-1.8C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 002.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 001.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 001.800-1.800C22 15.200 22 12 22 12s0-3.200-.4-4.800zM10 15V9l5.200 3-5.200 3z"/></svg></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Cybersecurity</a></li>
+        <li><a href="#services">Cloud Services</a></li>
+        <li><a href="#services">Connectivity</a></li>
+        <li><a href="#services">ICT Procurement</a></li>
+        <li><a href="#services">e-Government</a></li>
+        <li><a href="#services">Enterprise Apps</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Organisation</h4>
+      <ul>
+        <li><a href="#about">About SITA</a></li>
+        <li><a href="#about">Vision &amp; Values</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#careers">Careers</a></li>
+        <li><a href="#tenders">Tenders</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#contact">Contact Centre</a></li>
+        <li><a href="https://www.google.com/maps/search/?api=1&amp;query=459+Tsitsa+Street+Erasmuskloof+Pretoria" target="_blank" rel="noopener">459 Tsitsa Street</a></li>
+        <li><a href="https://www.google.com/maps/search/?api=1&amp;query=459+Tsitsa+Street+Erasmuskloof+Pretoria" target="_blank" rel="noopener">Erasmuskloof, Pretoria</a></li>
+        <li><a href="tel:+27124823000">012 482 3000</a></li>
+        <li><a href="mailto:contact.centre@sita.co.za">contact.centre@sita.co.za</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© <span id="year">2025</span> State Information Technology Agency SOC Ltd. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#contact">Privacy Policy</a>
+      <a href="#contact">Terms of Use</a>
+      <a href="#contact">PAIA Manual</a>
+      <div class="sa-flag">
+        <div class="flag-stripe" aria-hidden="true">
+          <span style="background:#007A4D;"></span>
+          <span style="background:#FFB612;"></span>
+          <span style="background:#DE3831;"></span>
+          <span style="background:#002395;"></span>
+          <span style="background:#ffffff;"></span>
+        </div>
+        South Africa
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+<script>
+  (function () {
+    var nav = document.getElementById('nav');
+    var toggle = document.getElementById('menuToggle');
+    var links = document.getElementById('navLinks');
+    var toTop = document.getElementById('toTop');
+
+    // Duplicate ticker items for a seamless loop
+    var track = document.getElementById('tickerTrack');
+    track.innerHTML += track.innerHTML;
+
+    // Mobile menu
+    function setMenu(open) {
+      links.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    }
+    toggle.addEventListener('click', function () { setMenu(!links.classList.contains('open')); });
+    links.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 960) setMenu(false); });
+
+    // Scroll reveal
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e, i) {
+          if (e.isIntersecting) {
+            setTimeout(function () { e.target.classList.add('visible'); }, i * 80);
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      reveals.forEach(function (el) { obs.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('visible'); });
+    }
+
+    // Animated counters
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.count').forEach(function (el) {
+      var target = +el.dataset.target;
+      if (reduce) return;
+      el.textContent = '0';
+      setTimeout(function () {
+        var start = Date.now();
+        var timer = setInterval(function () {
+          var p = Math.min((Date.now() - start) / 1400, 1);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+          if (p >= 1) clearInterval(timer);
+        }, 30);
+      }, 700);
+    });
+
+    // Nav state, active section and back-to-top
+    var sections = ['services', 'about', 'news', 'tenders', 'careers', 'contact']
+      .map(function (id) { return document.getElementById(id); });
+    function onScroll() {
+      var y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 60);
+      toTop.classList.toggle('show', y > 700);
+      var current = '';
+      sections.forEach(function (s) { if (s.getBoundingClientRect().top <= 120) current = s.id; });
+      links.querySelectorAll('a').forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current && !a.classList.contains('nav-cta'));
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    // Pre-select the contact topic from "Learn more" links and cards
+    var topic = document.getElementById('topic');
+    document.querySelectorAll('[data-topic]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var want = a.dataset.topic.replace(/&amp;/g, '&');
+        Array.prototype.forEach.call(topic.options, function (o) { if (o.text === want) topic.value = o.value; });
+      });
+    });
+
+    // "View All News" scrolls the news grid into view
+    var viewAll = document.getElementById('viewAllNews');
+    viewAll.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('newsGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // Contact form validation
+    var form = document.getElementById('contactForm');
+    var status = document.getElementById('formStatus');
+    function check(field, ok) {
+      field.closest('.field').classList.toggle('invalid', !ok);
+      return ok;
+    }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = form.elements.name, email = form.elements.email, message = form.elements.message;
+      var okName = check(name, name.value.trim().length > 1);
+      var okEmail = check(email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()));
+      var okMsg = check(message, message.value.trim().length >= 10);
+      status.className = 'form-status';
+      if (okName && okEmail && okMsg) {
+        status.textContent = 'Thank you, ' + name.value.trim().split(' ')[0] + '. Your message has been received (demo form, nothing was sent).';
+        status.className = 'form-status ok';
+        form.reset();
+      } else {
+        form.querySelector('.invalid input, .invalid textarea').focus();
+      }
+    });
+    form.addEventListener('input', function (e) {
+      var f = e.target.closest('.field');
+      if (f) f.classList.remove('invalid');
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>
